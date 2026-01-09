@@ -1,0 +1,29 @@
+# --- Secrets ---
+.env
+.keys/
+
+# --- Python ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.venv/
+venv/
+env/
+
+# --- Models & Outputs ---
+models/
+outputs/
+
+# --- Data ---
+data/raw/
+data/opensky/
+data/processed/
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+
+# --- Logs ---
+*.log
