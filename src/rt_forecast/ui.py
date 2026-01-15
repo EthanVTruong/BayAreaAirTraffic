@@ -51,7 +51,7 @@ def render_forecast(
             location=[37.5, -122.1],
             zoom_start=9,
             min_zoom=9,
-            max_zoom=12,
+            max_zoom=11,
             max_bounds=True,
             min_lat=sector_bounds[0][0],
             max_lat=sector_bounds[1][0],
