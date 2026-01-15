@@ -1,14 +1,16 @@
 """
-Bay Area ADS-B Acquisition Pipeline (CSV Mode)
-==============================================
-Processes local OpenSky State Vector CSVs for congestion forecasting.
-Optimized for 15/30-minute prediction horizons.
+Acquire Data - ADS-B Processing Pipeline
+=============================================
+Description: Offline utility that processes local OpenSky State Vector CSVs
+             into training-ready Parquet files. Filters by bounding box,
+             altitude, and flight validity. Used for model training data prep.
+Author: RT Forecast Team
+Version: 1.0.0
 
 Usage:
     python src/acquire_data.py --input data/raw/opensky --output data/processed
 
-Requirements:
-    pip install pandas numpy pyarrow
+Note: This is a standalone utility, not part of the live forecast pipeline.
 """
 
 import pandas as pd

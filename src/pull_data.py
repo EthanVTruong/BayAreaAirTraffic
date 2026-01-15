@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
 """
-OpenSky State Vector Downloader
-===============================
-Downloads hourly state vector CSVs from OpenSky's public dataset repository.
-Extracts tar archives and organizes CSVs into a single output folder.
+Pull Data - OpenSky Dataset Downloader
+=============================================
+Description: Downloads hourly state vector CSVs from OpenSky's public dataset
+             repository. Extracts tar archives and organizes CSVs into a single
+             output folder for training data preparation.
+Author: RT Forecast Team
+Version: 1.0.0
 
 Usage:
-    python src/download_opensky.py --output data/raw/opensky
+    python src/pull_data.py --output data/raw/opensky
 
-This downloads 7 days × 24 hours = 168 files (~130MB each compressed)
-Total download: ~22GB compressed → ~50GB+ extracted
+Note: Downloads ~22GB compressed data. This is a standalone utility for
+      training data acquisition, not part of the live forecast pipeline.
 """
 
 import os

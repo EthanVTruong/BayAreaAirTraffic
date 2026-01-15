@@ -1,0 +1,54 @@
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Test/Dev files
+tests/
+*.test.py
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Documentation
+docs/
+*.md
+LICENSE
+
+# Local data (will be generated at runtime)
+data/
+output/
+*.parquet
+*.json
+
+# Keep models directory structure but not contents
+# (models will be bootstrapped at runtime if missing)
+models/*.joblib
+models/*.meta.json
+
+# Misc
+.DS_Store
+Thumbs.db
+*.log
