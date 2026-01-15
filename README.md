@@ -1,6 +1,6 @@
 # RT Forecast - Real-Time Aviation Congestion Forecasting
 
-A production-grade, fault-tolerant Python service for predicting airspace congestion in the San Francisco Bay Area. Features a ForeFlight-inspired visualization with Sanctum Glassmorphism aesthetics.
+A Python service for predicting airspace congestion in the San Francisco Bay Area.
 
 ![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)
@@ -17,13 +17,6 @@ RT Forecast is a real-time aviation congestion prediction system that:
 - **Visualizes** results on an interactive Folium map with dual-layer radar display
 - **Deploys** seamlessly to cloud platforms (Render, Railway, Docker)
 
-### Visual Aesthetic
-
-The UI combines **ForeFlight's** aviation-grade clarity with **Sanctum.so's** glassmorphism design language:
-- Dark mode with NEXRAD-style gradient (Green → Yellow → Red → Magenta)
-- Glass-effect panels with backdrop blur
-- Responsive HUD with real-time metrics
-
 ---
 
 ## Architecture & Logic
@@ -31,10 +24,10 @@ The UI combines **ForeFlight's** aviation-grade clarity with **Sanctum.so's** gl
 ### Data Pipeline
 
 ```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+┌─────────────────┐     ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   OpenSky API   │───▶│  Grid Binning   │───▶│  ML Inference   │───▶│ Folium Render   │
-│   (ADS-B Data)  │    │  (0.05° cells)  │    │  (Hybrid Model) │    │  (index.html)   │
-└─────────────────┘    └─────────────────┘    └─────────────────┘    └─────────────────┘
+│   (ADS-B Data)  │     │  (0.05° cells)  │    │  (Hybrid Model) │    │  (index.html)   │
+└─────────────────┘     └─────────────────┘    └─────────────────┘    └─────────────────┘
         │                      │                      │                      │
         ▼                      ▼                      ▼                      ▼
    Aircraft states      Spatial aggregation    Current + Forecast     Interactive map
@@ -127,8 +120,7 @@ NEXRAD_GRADIENT = {
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/rt-forecast.git
-cd rt-forecast
+git clone https://github.com/EthanVTruong/BayAreaAirTraffic
 
 # Create virtual environment
 python -m venv .venv
@@ -144,7 +136,7 @@ pip install -r requirements.txt
 ```bash
 # Start the server
 python server.py
-# or: uvicorn server:app --host 0.0.0.0 --port 8000
+# or: python -m uvicorn server:app
 
 # Access the map
 open http://localhost:8000
@@ -289,5 +281,4 @@ MIT License - See LICENSE file for details.
 
 - **OpenSky Network** for providing free ADS-B data
 - **Folium** for Python mapping capabilities
-- **ForeFlight** for UI/UX inspiration
-- **Sanctum.so** for glassmorphism design principles
+- **ForeFlight** for UI/UX & project inspiration

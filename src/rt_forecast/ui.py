@@ -50,7 +50,7 @@ def render_forecast(
         m = folium.Map(
             location=[37.5, -122.1],
             zoom_start=10,
-            min_zoom=10,
+            min_zoom=9,
             max_zoom=12,
             max_bounds=True,
             min_lat=sector_bounds[0][0],
@@ -66,7 +66,7 @@ def render_forecast(
         # Forecast uses smaller radius to prevent overlap blowup on zoom
         layer_config = [
             ('current', 'current_congestion', 'Live Radar', True, 40, 35, 10),
-            ('15min', 'predicted_15min', 'Flow Forecast', False, 40, 35, 10)
+            ('15min', 'predicted_15min', 'Flow Forecast', False, 45, 40, 10)
         ]
 
         # Track layer JS variable names for toggle
@@ -176,6 +176,7 @@ def _inject_theme(m: folium.Map, layer_refs: Dict[str, str]):
 
     .leaflet-interactive { cursor: pointer !important; }
     .airport-label { color: var(--cyan); font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; text-shadow: 1px 1px 2px #000; pointer-events: none !important; }
+    .leaflet-heatmap-layer { pointer-events: none !important; }
     </style>
     """
 
@@ -235,14 +236,17 @@ def _inject_theme(m: folium.Map, layer_refs: Dict[str, str]):
 
 def _add_airport_markers(m: folium.Map, predictions: Dict, airport_scores: Dict):
     """Add markers with rank badges and trend indicators."""
+    # Use dedicated FeatureGroup for markers (ensures they stay on top and clickable)
+    marker_group = folium.FeatureGroup(name='Airports', show=True)
+
     for icao, (lat, lon, term_rad, det_rad, name) in AIRPORTS.items():
         scores = airport_scores.get(icao, {'rank': 5, 'score_current': 0.0, 'demand': 0})
         rank = scores.get('rank', 5)
         cur_s = scores.get('score_current', 0.0)
         demand = scores.get('demand', 0)
-        
+
         rank_class = f"rank-{rank}" if rank <= 3 else ""
-        
+
         popup_html = f'''<div class="efb-popup">
             <div class="efb-header">
                 <span>{icao} | {name}</span>
@@ -250,22 +254,25 @@ def _add_airport_markers(m: folium.Map, predictions: Dict, airport_scores: Dict)
             </div>
             <div class="efb-stat"><span>SECTOR DEMAND</span><span class="efb-val">{demand} AC</span></div>
         </div>'''
-        
-        # Label
-        folium.Marker(
-            [lat, lon], 
-            icon=folium.DivIcon(icon_anchor=(-12, 9), html=f'<div class="airport-label">{icao}</div>'), 
-            z_index_offset=MARKER_Z_INDEX
-        ).add_to(m)
 
-        # Dot marker (color by terminal congestion)
+        # Label (non-interactive)
+        folium.Marker(
+            [lat, lon],
+            icon=folium.DivIcon(icon_anchor=(-12, 9), html=f'<div class="airport-label">{icao}</div>'),
+            z_index_offset=MARKER_Z_INDEX
+        ).add_to(marker_group)
+
+        # Dot marker with popup (interactive)
         fill_color = "#00FF00" if cur_s < 0.4 else "#FFFF00" if cur_s < 0.7 else "#FF0000"
         folium.CircleMarker(
             [lat, lon], radius=6, color="white", weight=1, fill=True,
-            fill_color=fill_color, fill_opacity=1.0, 
-            popup=folium.Popup(popup_html, max_width=220), 
-            z_index_offset=MARKER_Z_INDEX 
-        ).add_to(m)
+            fill_color=fill_color, fill_opacity=1.0,
+            popup=folium.Popup(popup_html, max_width=220),
+            z_index_offset=MARKER_Z_INDEX
+        ).add_to(marker_group)
+
+    # Add marker group to map LAST to ensure it's on top
+    marker_group.add_to(m)
 
 
 def _add_hud(m: folium.Map, metrics: Dict, airport_scores: Dict):
