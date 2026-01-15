@@ -49,7 +49,7 @@ def render_forecast(
         
         m = folium.Map(
             location=[37.5, -122.1],
-            zoom_start=10,
+            zoom_start=9,
             min_zoom=9,
             max_zoom=12,
             max_bounds=True,
